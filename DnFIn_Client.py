@@ -7,7 +7,7 @@ from pprint import pprint
 from PIL import Image
 import tkinter.messagebox
 
-# Test
+# Test 6/11 6 : 48
 
 # 서버 연결
 server = "api.neople.co.kr"
