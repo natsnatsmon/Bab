@@ -16,14 +16,15 @@ def raise_frame(frame):
     frame.tkraise()
 
 def init_Frame():
-    global window, frameCharacter, frameAction, buttonToCharacter, buttonToAction
+    global window, frameCharacter, frameAuction, buttonToCharacter, buttonToAction
     frameCharacter = LabelFrame(window, text = "캐릭터", width = 400 - 40, height = 250 - 40)
-    frameAction = LabelFrame(window, text = "경매장", width = 400 - 40, height = 250 - 40)
+    frameAuction = LabelFrame(window, text = "경매장", width = 400 - 40, height = 250 - 40)
     frameCharacter.place(x = 20, y = 120)
-    frameAction.place(x = 20, y = 370)
+    frameAuction.place(x = 20, y = 370)
 
     Label(frameCharacter, text = '캐릭터').pack()
-    Label(frameAction, text = '경매장').pack()
+    Label(frameAuction, text = '경매장').pack()
+
 
 def init_Window():
     global window
