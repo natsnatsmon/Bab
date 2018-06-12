@@ -1,42 +1,18 @@
-import http.client
-import urllib.request
-import json
-from tkinter import *
-from tkinter import font
-from pprint import pprint
-#from PIL import Image
-import tkinter.messagebox
+from ui import *
 
-# Test 6/11 6 : 48
-
-# 서버 연결
-server = "api.neople.co.kr"
-apiKey = "7U2KCB4WfpbyjuvPBbqsz1uOxm4Waddl"
 dataList = []
 
-def connectOpenAPIServer():
-    global conn, server
-    conn = http.client.HTTPSConnection(server)
-    conn.set_debuglevel(1)
-
-def InitTopText():
-    tmpFont = font.Font(DnF_In_window, size=20, weight = 'bold', family = 'Consolas')
-    mainText = Label(DnF_In_window, font = tmpFont, text = "던파 in")
-    mainText.pack()
-    mainText.place(x=20, y = 20)
-
-
 def InitServerListBox() :
-    global ServerListBox
-    serverInputLabel = Label(DnF_In_window, text="서버")
+    global frameCharacter, ServerListBox
+    serverInputLabel = Label(frameCharacter, text="서버")
     serverInputLabel.place(x=50, y=100)
 
-    #    ServerBoxScroll = Scrollbar(DnF_In_window)
+    #    ServerBoxScroll = Scrollbar(frameCharacter)
 #    ServerBoxScroll.pack()
 #    ServerBoxScroll.place(x = 200, y = 100)
 
-    tmpFont = font.Font(DnF_In_window, size = 10, weight = 'bold', family = 'Consolas')
-    ServerListBox = Listbox(DnF_In_window, font = tmpFont, activestyle = 'none', width = 10, height = 4)
+    tmpFont = font.Font(frameCharacter, size = 10, weight = 'bold', family = 'Consolas')
+    ServerListBox = Listbox(frameCharacter, font = tmpFont, activestyle = 'none', width = 10, height = 4)
 
     ServerListBox.insert(1, "카인")
     ServerListBox.insert(2, "디레지에")
@@ -50,20 +26,20 @@ def InitServerListBox() :
     ServerListBox.place(x = 100, y = 100)
 
 def InitInputLabel() :
-    characterInputLabel = Label(DnF_In_window, text="닉네임")
+    global frameCharacter
+    characterInputLabel = Label(frameCharacter, text="닉네임")
     characterInputLabel.place(x=50, y=200)
 
     global characterEntry
-    tmpFont = font.Font(DnF_In_window, size=10, weight='bold', family='Consolas')
-    characterEntry = Entry(DnF_In_window, font=tmpFont, width=15)
+    tmpFont = font.Font(frameCharacter, size=10, weight='bold', family='Consolas')
+    characterEntry = Entry(frameCharacter, font=tmpFont, width=15)
     characterEntry.pack()
     characterEntry.place(x=100, y=200)
 
-
- # 캐릭터 검색
 def InitSearchButton() :
-    tmpFont = font.Font(DnF_In_window, size=10, weight='bold', family='Consolas')
-    searchButton = Button(DnF_In_window, font = tmpFont, text="검색", command = SearchButtonAction)
+    global frameCharacter
+    tmpFont = font.Font(frameCharacter, size=10, weight='bold', family='Consolas')
+    searchButton = Button(frameCharacter, font = tmpFont, text="검색", command = SearchButtonAction)
     searchButton.place(x=150, y=250)
 
 def SearchButtonAction() :
@@ -76,12 +52,12 @@ def SearchButtonAction() :
 
 
 def InitRenderText() :
-    global RenderText
-#    RenderTextScrollbar = Scrollbar(DnF_In_window)
+    global RenderText, frameCharacter
+#    RenderTextScrollbar = Scrollbar(frameCharacter)
 #    RenderTextScrollbar.pack()
 #    RenderTextScrollbar.place(x=375, y=200)
-    tmpFont = font.Font(DnF_In_window, size=10, family='Consolas')
-    RenderText = Text(DnF_In_window, font = tmpFont, width=49, height=27)
+    tmpFont = font.Font(frameCharacter, size=10, family='Consolas')
+    RenderText = Text(frameCharacter, font = tmpFont, width=49, height=27)
     RenderText.pack()
     RenderText.place(x=10, y=280)
 #    RenderTextScrollbar.config(command=RenderText.yview)
@@ -157,26 +133,8 @@ def getCharacterIdFromCharacterName():
         print("OpenAPI request has been failed!! please retry")
         return None
 
-
-
-
-# 서버 접속
-connectOpenAPIServer()
-
-# tkinter
-DnF_In_window = Tk()
-DnF_In_window.geometry("400x600")
-
-InitTopText()
-InitServerListBox()
-InitInputLabel()
-InitSearchButton()
-InitRenderText()
-
-DnF_In_window.mainloop()
-
-#print("서버를 입력하세요.")
-#serverId = input()
-
-#print("캐릭터 이름을 입력하세요.")
-#characterName = input()
+def init_Character():
+    InitServerListBox()
+    InitInputLabel()
+    InitSearchButton()
+    InitRenderText()
