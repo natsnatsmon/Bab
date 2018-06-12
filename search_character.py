@@ -25,45 +25,6 @@ def connectOpenAPIServer():
     ServerListBox.pack()
     ServerListBox.place(x = 100, y = 100)
 
-def InitInputLabel() :
-    characterInputLabel = Label(DnF_In_window, text="닉네임")
-    characterInputLabel.place(x=50, y=200)
-
-    global characterEntry
-    tmpFont = font.Font(DnF_In_window, size=10, weight='bold', family='Consolas')
-    characterEntry = Entry(DnF_In_window, font=tmpFont, width=15)
-    characterEntry.pack()
-    characterEntry.place(x=100, y=200)
-
-
- # 캐릭터 검색
-def InitSearchButton() :
-    tmpFont = font.Font(DnF_In_window, size=10, weight='bold', family='Consolas')
-    searchButton = Button(DnF_In_window, font = tmpFont, text="검색", command = SearchButtonAction)
-    searchButton.place(x=150, y=250)
-
-def SearchButtonAction() :
-    RenderText.configure(state = 'normal')
-    RenderText.delete(0.0, END)
-
-    getCharacterIdFromCharacterName()
-
-    RenderText.configure(state='disabled')
-
-
-def InitRenderText() :
-    global RenderText
-#    RenderTextScrollbar = Scrollbar(DnF_In_window)
-#    RenderTextScrollbar.pack()
-#    RenderTextScrollbar.place(x=375, y=200)
-    tmpFont = font.Font(DnF_In_window, size=10, family='Consolas')
-    RenderText = Text(DnF_In_window, font = tmpFont, width=49, height=27)
-    RenderText.pack()
-    RenderText.place(x=10, y=280)
-#    RenderTextScrollbar.config(command=RenderText.yview)
-#    RenderTextScrollbar.pack(side=RIGHT, fill=BOTH)
-    RenderText.configure(state='disabled')
-
 # 캐릭터 이름, 서버로 정보 찾기
 def getCharacterIdFromCharacterName():
     global server, conn, apiKey, serverId, characterName, ServerListBox

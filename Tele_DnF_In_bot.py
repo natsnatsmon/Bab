@@ -1,12 +1,7 @@
 import telepot
-#import noti
-import pprint
+import noti
+from pprint import pprint
 import time
-
-bot = telepot.Bot('586425069:AAH1R8tLZ7Ynq8nGVA5zJu-Zq9IJ0b9rbbU')
-
-print(bot.getMe())
-bot.sendMessage('568233093', 'Hi HY, I\'m DnF In bot!')
 
 def handle(msg):
     content_type, chat_type, chat_id = telepot.glance(msg)
@@ -17,18 +12,20 @@ def handle(msg):
     text = msg['text']
     args = text.split(' ')
 
-    if text.startswith('검색'):
-        bot.sendMessage(chat_id, '서버와 캐릭터 이름을 입력해주세요.')
+    if text.startswith('검색') and len(args) > 1:
+        bot.sendMessage(chat_id, '검색 완료')
+        replySearchCharacter(args)
 
-
-
+    else:
+        bot.sendMessage(chat_id, '모르는 명령어입니다!')
 
 def replySearchCharacter(character_name):
     print(character_name)
+#    res_list = noti.getCharacterList(character_name)
+    msg = ''
 
 
-
-#bot = telepot.Bot(bot.TOKEN)
+bot = telepot.Bot(noti.TOKEN)
 pprint(bot.getMe())
 
 bot.message_loop(handle)
