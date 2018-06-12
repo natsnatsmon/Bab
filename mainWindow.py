@@ -12,6 +12,22 @@ def connectOpenAPIServer():
     conn = http.client.HTTPSConnection(server)
     conn.set_debuglevel(1)
 
+def init_Window():
+    global window
+    window = Tk()
+    window.geometry("400x600")
+
+    tmpFont = font.Font(window, size=20, weight = 'bold', family = 'Consolas')
+    mainText = Label(window, font = tmpFont, text = "던파 in")
+    mainText.pack()
+    mainText.place(x=150, y = 20)
+
+    init_Frame()
+
+def init_Ui():
+    connectOpenAPIServer()
+    init_Window()
+
 def raise_frame(frame):
     frame.tkraise()
 
@@ -24,22 +40,6 @@ def init_Frame():
 
     Label(frameCharacter, text = '캐릭터').pack()
     Label(frameAction, text = '경매장').pack()
-
-def init_Window():
-    global window
-    window = Tk()
-    window.geometry("400x600")
-
-    tmpFont = font.Font(window, size=20, weight = 'bold', family = 'Consolas')
-    mainText = Label(window, font = tmpFont, text = "던파 in")
-    mainText.pack()
-    mainText.place(x=20, y = 20)
-
-    init_Frame()
-
-def init_Ui():
-    connectOpenAPIServer()
-    init_Window()
 
 def run_Window():
     global window
