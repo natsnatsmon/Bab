@@ -1,6 +1,6 @@
-import ui
-import character
+import mainWindow
+import characterWindow
 
-ui.init_Ui()
-character.init_Character()
-ui.run_Window()
+mainWindow.init_Ui()
+mainWindow.init_Character()
+mainWindow.run_Window()
