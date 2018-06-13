@@ -83,31 +83,23 @@ def getCharacterIdFromCharacterName(serverId, characterName):
     conn.request("GET", "/df/servers/" + serverId + "/characters?characterName=" + encText + "&apikey=" + apiKey)
     req = conn.getresponse()
 
-#    dataList.clear()
-    # 서버와 캐릭터 닉네임이 일치하는 캐릭터가 있다면
     if int(req.status) == 200:
         response_body = req.read()
-        #        print(response_body, type(response_body))
-        print("\n---------------여기까지출력됨---------------\n")
         decode_response_body = response_body.decode('utf-8')
-        #        print(decode_response_body)
-        #        print(type(decode_response_body))
         json_response_body = json.loads(decode_response_body)
+        if not json_response_body['rows']:
+            tkinter.messagebox.showerror("DnF in", "게임 내에 캐릭터가 존재하지 않습니다.")
+            return None
         dic_character_data = json_response_body['rows'][0]
-        #        print(type(json_response_body))
         print(dic_character_data['characterName'], dic_character_data['level'], dic_character_data['characterId'])
-        print("\n---------------여기까지출력됨---------------\n")
-        #characterWindow = Toplevel()
+        # characterId 추출
+        characterId = dic_character_data['characterId']
+        characterWindow.init_Ui(serverId, characterId)
         characterWindow.run_CharacterWindow()
 
     else :
-        tkinter.messagebox.showerror("DnF in", "게임 내에 캐릭터가 존재하지 않습니다.")
+        tkinter.messagebox.showerror("DnF in", "다시 시도해주세요.")
         return None
-
-
-
-
-
 
 def command_CharacterBookmark():
     global selectedServer, characterEntry
@@ -158,3 +150,6 @@ def run_Window():
     global window
     raise_frame(frameCharacter)
     window.mainloop()
+
+init_Ui()
+run_Window()

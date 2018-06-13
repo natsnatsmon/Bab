@@ -41,5 +41,5 @@ def a_init_Window(input_itemName):
 
 
 
-a_init_Window()
+a_init_Window("magtonum")
 auctionWindow.mainloop()
