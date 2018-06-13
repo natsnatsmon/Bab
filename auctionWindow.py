@@ -140,5 +140,9 @@ def a_init_Window(input_itemName):
 
 
 
+<<<<<<< HEAD
 a_init_Window("마그토늄")
+=======
+a_init_Window("magtonum")
+>>>>>>> 1b3453b9689e0832c9944509bec2819329b49ca5
 auctionWindow.mainloop()
