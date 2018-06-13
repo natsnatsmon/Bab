@@ -77,15 +77,10 @@ def SearchButtonAction() :
 
 def InitRenderText() :
     global RenderText
-#    RenderTextScrollbar = Scrollbar(DnF_In_window)
-#    RenderTextScrollbar.pack()
-#    RenderTextScrollbar.place(x=375, y=200)
     tmpFont = font.Font(DnF_In_window, size=10, family='Consolas')
     RenderText = Text(DnF_In_window, font = tmpFont, width=49, height=27)
     RenderText.pack()
     RenderText.place(x=10, y=280)
-#    RenderTextScrollbar.config(command=RenderText.yview)
-#    RenderTextScrollbar.pack(side=RIGHT, fill=BOTH)
     RenderText.configure(state='disabled')
 
 # 캐릭터 이름, 서버로 정보 찾기
