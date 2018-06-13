@@ -69,6 +69,3 @@ def run_Window():
     global window
     raise_frame(frameCharacter)
     window.mainloop()
-
-init_Ui()
-run_Window()
