@@ -157,10 +157,16 @@ def init_Window():
     window.geometry("400x450")
     window.title("DnF in")
 
-    tmpFont = font.Font(window, size=20, weight = 'bold', family = 'Consolas')
+    logo = PhotoImage(file = "logo.png")
+    logoLabel = Label(image = logo)
+    logoLabel.image = logo
+    logoLabel.pack()
+    logoLabel.place(x = 10, y = 20)
+
+    tmpFont = font.Font(window, size=20, weight='bold', family='Consolas')
     mainText = Label(window, font = tmpFont, text = "던파 in")
     mainText.pack()
-    mainText.place(x=20, y = 30)
+    mainText.place(x=100, y = 45)
 
     init_Frame()
 
