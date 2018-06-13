@@ -15,18 +15,9 @@ def connectOpenAPIServer():
 def raise_frame(frame):
     frame.tkraise()
 
-def init_Frame():
-    global window, frameCharacter, frameAuction, buttonToCharacter, buttonToAction
-    frameCharacter = LabelFrame(window, text = "캐릭터", width = 400 - 40, height = 250 - 40)
-    frameAuction = LabelFrame(window, text = "경매장", width = 400 - 40, height = 250 - 40)
-    frameCharacter.place(x = 20, y = 120)
-    frameAuction.place(x = 20, y = 370)
-
-    Label(frameCharacter, text = '캐릭터').pack()
-    Label(frameAuction, text = '경매장').pack()
-
+def init_CharacterFrame():
     serverInputLabel = Label(frameCharacter, text="서버")
-    serverInputLabel.place(x=50, y=100)
+    serverInputLabel.place(x=10, y=10)
 
     #    ServerBoxScroll = Scrollbar(DnF_In_window)
     #    ServerBoxScroll.pack()
@@ -43,12 +34,19 @@ def init_Frame():
     ServerListBox.insert(6, "힐더")
     ServerListBox.insert(7, "안톤")
     ServerListBox.insert(8, "바칼")
-    ServerListBox.place(x=100, y=100)
-    ServerListBox.pack()
+    ServerListBox.place(x=50, y=10)
+    ServerListBox.pack_propagate(0)
 
-    characterInputLabel = Label(frameCharacter, text="닉네임")
-    characterInputLabel.place(x=50, y=200)
-    characterInputLabel.pack()
+def init_Frame():
+    global window, frameCharacter, frameAuction, buttonToCharacter, buttonToAction
+    frameCharacter = LabelFrame(window, text = "캐릭터",width = 400 - 40, height = 250 - 40)
+    frameAuction = LabelFrame(window, text = "경매장", width = 400 - 40, height = 250 - 40)
+    frameCharacter.place(x = 20, y = 100)
+    frameAuction.place(x = 20, y = 340)
+    frameCharacter.pack_propagate(0)
+    frameAuction.pack_propagate(0)
+
+    init_CharacterFrame()
 
 
 def init_Window():
