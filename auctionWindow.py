@@ -155,5 +155,14 @@ def a_init_Window(input_itemName):
     else:
         tkinter.messagebox.showerror("DnF in", "아이템 이름을 입력해주세요")
 
+<<<<<<< HEAD
 #a_init_Window("마그토늄")
 #auctionWindow.mainloop()
+=======
+
+a_init_Window("마그토늄")
+
+a_init_Window("magtonum")
+
+auctionWindow.mainloop()
+>>>>>>> refs/remotes/origin/master

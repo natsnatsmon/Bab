@@ -94,7 +94,7 @@ def init_StatusFrame():
     if conn == None:
         connectOpenAPIServer()
 
-    conn.request("GET", "/df/servers/"+serverId+"/characters/" + characterId +"?apikey=" + apiKey)
+    conn.request("GET", "/df/servers/"+serverId+"/characters/" + characterId +"/status?apikey=" + apiKey)
     req = conn.getresponse()
 
     if int(req.status) == 200:
@@ -103,21 +103,22 @@ def init_StatusFrame():
         decode_response_body = response_body.decode('utf-8')
         json_response_body = json.loads(decode_response_body)
         dic_info_data = json_response_body
+        dic_equip_data = json_response_body['status']
 
-        tmpFont = font.Font(frameInfo, size=25, weight='bold', family='Consolas')
-        characterNameText = Label(frameInfo, font=tmpFont, text=dic_info_data['characterName'],
-                                  pady = 20, justify = CENTER)
-        characterNameText.pack()
+        statusList = []
+        for i in dic_equip_data:
+            statusNameValue = i['name'] + " : " + str(i['value'])
+            statusList.append(statusNameValue)
 
-        levelJobText = "Lv. " + str(dic_info_data['level']) + " | " + dic_info_data['jobGrowName']
-        tmpFont = font.Font(frameInfo, size=15, family='Consolas')
-        characterLevelJobText = Label(frameInfo, font=tmpFont, text=levelJobText,
-                                  pady = 0, justify = CENTER)
-        characterLevelJobText.pack()
+        textBox = Text(frameStatus, width=38)
+        textBox.pack(side=LEFT)
+        sc = Scrollbar(frameStatus)
+        sc.pack(side=RIGHT, fill=Y)
+        sc.config(command=textBox.yview)
+        textBox.config(yscrollcommand=sc.set)
 
-        tmpFont = font.Font(frameInfo, size=15, family='Consolas')
-        characterGuildNameText = Label(frameInfo, font=tmpFont, text=dic_info_data['guildName'], pady = 0, justify = CENTER)
-        characterGuildNameText.pack()
+        for i in statusList:
+           textBox.insert(INSERT, i + "\n")
 
     else:
         tkinter.messagebox.showerror("DnF in", "다시 시도해주세요.")
@@ -138,18 +139,22 @@ def init_Equipment():
         print("\n---------------여기까지출력됨---------------\n")
         decode_response_body = response_body.decode('utf-8')
         json_response_body = json.loads(decode_response_body)
-        dic_info_data = json_response_body['equipment']
+        dic_equip_data = json_response_body['equipment']
 
-        print(dic_info_data[0]['slotName'], dic_info_data[1]['slotName'])
-#        itemList = []
-#        for i in dic_info_data:
-#            slotItemName = dic_info_data[i]['soltName'] + dic_info_data[i]['itemName']
-#            itemList.append(slotItemName)
+        itemList = []
+        for i in dic_equip_data:
+            slotItemName = i['slotName'] + " : " + i['itemName']
+            itemList.append(slotItemName)
 
-#        tmpFont = font.Font(frameEquipment, size=25, weight='bold', family='Consolas')
-#        characterNameText = Label(frameInfo, font=tmpFont, text=itemList[0],
-#                                  pady = 20, justify = CENTER)
-#        characterNameText.pack()
+        textBox = Text(frameEquipment, width=38)
+        textBox.pack(side=LEFT)
+        sc = Scrollbar(frameEquipment)
+        sc.pack(side=RIGHT, fill=Y)
+        sc.config(command=textBox.yview)
+        textBox.config(yscrollcommand=sc.set)
+
+        for i in itemList:
+            textBox.insert(INSERT, i + "\n")
 
     else:
         tkinter.messagebox.showerror("DnF in", "다시 시도해주세요.")
