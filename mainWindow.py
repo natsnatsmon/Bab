@@ -22,9 +22,30 @@ def connectOpenAPIServer():
 def raise_frame(frame):
     frame.tkraise()
 
+def inin_auctionFrame():
+    global frameAuction, itemEntry, tmpFont
+    serverInputLabel = Label(frameAuction, text="아이템 이름", font = tmpFont)
+    serverInputLabel.place(x=10 + 20, y=20)
+
+    itemEntry = Entry(frameAuction, font=tmpFont, width=20)
+    itemEntry.place(x=100 + 20, y=20)
+
+    searchButton = Button(frameAuction, text = "검색", font = tmpFont, command = search_item)
+    searchButton.place(x=250 + 20, y=16)
+
+def search_item():
+    global itemEntry
+    itemName = itemEntry.get()
+    if itemName is '':
+        tkinter.messagebox.showerror("DnF in", "아이템 이름을 입력해주세요")
+    else:
+        import auctionWindow
+        auctionWindow.a_init_Window(itemName)
+        auctionWindow.auctionWindow.mainloop()
+
 def init_CharacterFrame():
-    global selectedServer
-    tmpFont = font.Font(frameCharacter, size=10, weight='bold', family='Consolas')
+    global selectedServer, tmpFont
+    tmpFont = font.Font(window, size=10, weight='bold', family='Consolas')
 
     # 서버 선택 버튼
     serverInputLabel = Label(frameCharacter, text="서버", font = tmpFont)
@@ -128,6 +149,7 @@ def init_Frame():
     frameAuction.pack_propagate(0)
 
     init_CharacterFrame()
+    inin_auctionFrame()
 
 def init_Window():
     global window
@@ -150,6 +172,3 @@ def run_Window():
     global window
     raise_frame(frameCharacter)
     window.mainloop()
-
-init_Ui()
-run_Window()

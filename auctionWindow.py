@@ -1,7 +1,19 @@
-from mainWindow import *
+import http.client
+import urllib.request
+import json
+from tkinter import *
 from PIL import ImageTk
 from PIL import Image
 from io import BytesIO
+import tkinter.messagebox
+
+server = "api.neople.co.kr"
+apiKey = "7U2KCB4WfpbyjuvPBbqsz1uOxm4Waddl"
+
+def connectOpenAPIServer():
+    global conn, server
+    conn = http.client.HTTPSConnection(server)
+    conn.set_debuglevel(1)
 
 def a_find_itemKey():
     global itemName, conn, server, apiKey, itemID
@@ -40,8 +52,10 @@ def a_init_image():
         raw_data = u.read()
     im = Image.open(BytesIO(raw_data))
     im = im.resize((56, 56), Image.ANTIALIAS)
-    itemImage = ImageTk.PhotoImage(im)
-    itemImageLabel = Label(auctionWindow, image = itemImage, width= 56, height= 56)
+    itemImage = ImageTk.PhotoImage(im, master=auctionWindow)
+    import gc
+    gc.disable()
+    itemImageLabel = Label(master=auctionWindow, image = itemImage, width= 56, height= 56)
     itemImageLabel.place(x=20 + 100 - 28, y=20 + 80 - 25 - 28)
     itemImageLabel.pack_propagate(0)
 
@@ -126,23 +140,20 @@ def a_init_Window(input_itemName):
     global auctionWindow,itemName
     itemName = input_itemName
 
+    connectOpenAPIServer()
+
     if a_find_itemKey() == True:
         auctionWindow = Tk()
         auctionWindow.geometry("600x400")
-        a_init_image()
 
         a_init_frame()
 
         info_item()
         info_auction()
+
+        a_init_image()
     else:
-        a_init_falseWindow()
+        tkinter.messagebox.showerror("DnF in", "아이템 이름을 입력해주세요")
 
-
-
-<<<<<<< HEAD
-a_init_Window("마그토늄")
-=======
-a_init_Window("magtonum")
->>>>>>> 1b3453b9689e0832c9944509bec2819329b49ca5
-auctionWindow.mainloop()
+#a_init_Window("마그토늄")
+#auctionWindow.mainloop()
