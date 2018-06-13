@@ -5,8 +5,6 @@ from tkinter import *
 from tkinter import font
 import tkinter.messagebox
 import characterWindow
-import pickle
-from collections import OrderedDict
 
 server = "api.neople.co.kr"
 apiKey = "7U2KCB4WfpbyjuvPBbqsz1uOxm4Waddl"
@@ -15,9 +13,6 @@ servers = [
     ("카인", "cain", 0, 0), ("안톤", "anton", 1, 0), ("시로코", "siroco", 2, 0), ("디레지에", "diregie", 3, 0),
     ("힐더", "hilder", 0, 2), ("바칼", "bakal", 1, 2), ("프레이", "prey", 2, 2), ("카시야스", "casillas", 3, 2)
 ]
-
-servers_dict = { "cain" : "카인", "anton" : "안톤", "siroco" : "시로코", "diregie" : "디레지에",
-                 "hilder" : "힐더", "bakal" : "바칼", "prey" : "프레이", "casillas" : "카시야스" }
 
 def connectOpenAPIServer():
     global conn, server
@@ -125,28 +120,7 @@ def init_CharacterFrame():
 
     # 즐겨찾기 리스트
     serverInputLabel = Label(frameCharacter, text="즐겨찾기", font=tmpFont)
-    serverInputLabel.place(x=10, y=100)
-
-    global characterBookmarkListBox
-    #    ServerBoxScroll = Scrollbar(DnF_In_window)
-    #    ServerBoxScroll.pack()
-    #    ServerBoxScroll.place(x = 200, y = 100)
-
-    tmpFont = font.Font(frameCharacter, size=10, weight='bold', family='Consolas')
-    characterBookmarkListBox = Listbox(frameCharacter, font=tmpFont, activestyle='none', width=10, height=4)
-
-
-#    file = open("bookmark_character.json", "r")
-#    if not file :
-#        pass
-#    else :
-#        dic_status_data = file
-#        print(type(file))
-#        for i in file :
-#            serverNameCharacterName = servers_dict['serverId'] + i['characterName']
-#            characterBookmarkListBox.insert(i, text = serverNameCharacterName)
-#    serverId = selectedServer.get()
-
+    serverInputLabel.place(x=10, y=120)
 
 def command_CharacterSearch():
     global selectedServer, characterEntry
@@ -158,15 +132,11 @@ def command_CharacterSearch():
     elif characterName == '' :
         tkinter.messagebox.showerror("DnF in", "캐릭터 닉네임을 입력해주세요")
     else :
-        if getCharacterIdFromCharacterName(serverId, characterName) == None:
-            pass
-        else :
-            characterWindow.init_Ui(serverId, characterId)
-            characterWindow.run_CharacterWindow()
+        getCharacterIdFromCharacterName(serverId, characterName)
 
 # 캐릭터 이름, 서버로 정보 찾기
 def getCharacterIdFromCharacterName(serverId, characterName):
-    global server, conn, apiKey, characterId
+    global server, conn, apiKey
     print(serverId, characterName)
 
     if conn == None:
@@ -187,8 +157,8 @@ def getCharacterIdFromCharacterName(serverId, characterName):
         print(dic_character_data['characterName'], dic_character_data['level'], dic_character_data['characterId'])
         # characterId 추출
         characterId = dic_character_data['characterId']
-        return characterId
-
+        characterWindow.init_Ui(serverId, characterId)
+        characterWindow.run_CharacterWindow()
 
     else :
         tkinter.messagebox.showerror("DnF in", "다시 시도해주세요.")
@@ -199,38 +169,14 @@ def command_CharacterBookmark():
     serverId = selectedServer.get()
     characterName = characterEntry.get()
 
-    file = open("bookmark_character.txt", "wb")
-    characterData = OrderedDict()
-
     if server == 'None':
         tkinter.messagebox.showerror("DnF in", "서버를 선택해주세요")
     elif characterName == '':
         tkinter.messagebox.showerror("DnF in", "캐릭터 닉네임을 입력해주세요")
         #    elif :
     else:
-        if getCharacterIdFromCharacterName(serverId, characterName) == None :
-            pass
-        else :
-            characterData["server"] = servers_dict[serverId]
-            characterData["serverId"] = serverId
-            characterData["characterName"] = characterEntry.get()
-            characterData["characterId"] = characterId
-
-            pickle.dump(characterData, file)
-
-#            print(json.dumps(characterData, ensure_ascii=False, indent="\t"))
-
-#            with open('bookmark_character.json', mode = 'w', encoding="utf-8") as f:
-#                json.dump([], f)
-#            with open('bookmark_character.json', mode = 'a', encoding="utf-8") as make_file:
-#                entry =
-#                json.dump(characterData, make_file, ensure_ascii=False, indent="\t")
-
-#            with open("bookmark_character.json", "a") as data:
-#                data.write(json.dumps(characterData))
-#                data.close()
-
-    file.close()
+        print(server, characterName)
+    pass
 
 def init_Frame():
     global window, frameCharacter, frameAuction, buttonToCharacter, buttonToAction

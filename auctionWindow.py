@@ -211,4 +211,4 @@ def a_init_Window(input_itemName):
 
         a_init_image()
     else:
-        tkinter.messagebox.showerror("DnF in", "아이템 이름을 입력해주세요")
+        tkinter.messagebox.showerror("DnF in", "해당 아이템을 찾을 수 없습니다")
