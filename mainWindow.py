@@ -104,11 +104,6 @@ def getCharacterIdFromCharacterName(serverId, characterName):
         tkinter.messagebox.showerror("DnF in", "게임 내에 캐릭터가 존재하지 않습니다.")
         return None
 
-
-
-
-
-
 def command_CharacterBookmark():
     global selectedServer, characterEntry
     serverId = selectedServer.get()
@@ -158,3 +153,6 @@ def run_Window():
     global window
     raise_frame(frameCharacter)
     window.mainloop()
+
+init_Ui()
+run_Window()
