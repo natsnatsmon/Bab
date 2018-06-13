@@ -139,7 +139,7 @@ def init_CharacterFrame():
 
     print(characterData)
     for d in characterData:
-        characterBookmarkListBox.insert(0, characterData[str(characterNum)]['server'] + " " +
+        characterBookmarkListBox.insert(characterNum, characterData[str(characterNum)]['server'] + " " +
                                         characterData[str(characterNum)]['characterName'] )
         characterNum += 1
     characterBookmarkListBox.pack()
