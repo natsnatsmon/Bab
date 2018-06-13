@@ -98,55 +98,68 @@ def init_CharacterFrame():
     serverInputLabel = Label(frameCharacter, text="서버", font = tmpFont)
     serverInputLabel.place(x=10, y=12)
 
+    global selectedServer
     selectedServer = StringVar()
     selectedServer.set(None)
 
     for text, select, w, h in servers:
         serverRButton = Radiobutton(frameCharacter, text=text, font=tmpFont,
                                     value=select, variable=selectedServer)
-        serverRButton.place(x=50 + (70 * w), y=10 + (10 * h))
+        serverRButton.place(x=50 + (70 * w), y=10 + (15 * h))
 
     # 닉네임 입력 창
     serverInputLabel = Label(frameCharacter, text="닉네임", font = tmpFont)
-    serverInputLabel.place(x=10, y=60)
+    serverInputLabel.place(x=10, y=80)
 
     global characterEntry
     tmpFont = font.Font(frameCharacter, size=10, weight='bold', family='Consolas')
-    characterEntry = Entry(frameCharacter, font=tmpFont, width=15)
-    characterEntry.place(x=70, y=60)
+    characterEntry = Entry(frameCharacter, font=tmpFont, width=20)
+    characterEntry.place(x=90, y=80)
 
     # 검색 버튼
     searchButton = Button(frameCharacter, text = "검색", font = tmpFont, command = command_CharacterSearch)
-    searchButton.place(x=200, y=60)
+    searchButton.place(x=250, y=80)
 
     # 즐겨찾기 등록 버튼
-    searchButton = Button(frameCharacter, text = "즐겨찾기 등록", font = tmpFont, command = command_CharacterBookmark)
-    searchButton.place(x=250, y=60)
+    searchButton = Button(frameCharacter, text = "저장", font = tmpFont, command = command_CharacterBookmark)
+    searchButton.place(x=300, y=80)
 
     # 즐겨찾기 리스트
     serverInputLabel = Label(frameCharacter, text="즐겨찾기", font=tmpFont)
-    serverInputLabel.place(x=10, y=100)
+    serverInputLabel.place(x=10, y=120)
 
-    global characterBookmarkListBox
-    #    ServerBoxScroll = Scrollbar(DnF_In_window)
-    #    ServerBoxScroll.pack()
-    #    ServerBoxScroll.place(x = 200, y = 100)
+    global characterData, characterNum, characterBookmarkListBox
 
-    tmpFont = font.Font(frameCharacter, size=10, weight='bold', family='Consolas')
-    characterBookmarkListBox = Listbox(frameCharacter, font=tmpFont, activestyle='none', width=10, height=4)
+    r = open('bookmark_character.json', mode="r", encoding="utf-8").read()
 
+    characterData = json.loads(r)
 
-#    file = open("bookmark_character.json", "r")
-#    if not file :
-#        pass
-#    else :
-#        dic_status_data = file
-#        print(type(file))
-#        for i in file :
-#            serverNameCharacterName = servers_dict['serverId'] + i['characterName']
-#            characterBookmarkListBox.insert(i, text = serverNameCharacterName)
-#    serverId = selectedServer.get()
+    characterBookmarkListBox = Listbox(frameCharacter, font=tmpFont, selectmode = 'extended', width=35, height=3)
+    characterNum = 0
 
+    print(characterData)
+    for d in characterData:
+        characterBookmarkListBox.insert(0, characterData[str(characterNum)]['server'] + " " +
+                                        characterData[str(characterNum)]['characterName'] )
+        characterNum += 1
+    characterBookmarkListBox.pack()
+    characterBookmarkListBox.place(x = 90, y = 120)
+
+    characterBookmarkListBox.bind('<<ListboxSelect>>', select_character)
+
+def select_character(evt):
+    global characterData, selectedServer
+    r = open('item.json', mode="r", encoding="utf-8").read()
+
+    w = evt.widget
+    index = int(w.curselection()[0])
+    serverId = characterData[str(index)]['serverId']
+    characterName = characterData[str(index)]['characterName']
+
+    print ('You selected character %d: "%s" "%s"' % (index, serverId, characterName))
+    characterEntry.delete(0, END)
+    characterEntry.insert(INSERT, characterName)
+    selectedServer.set(serverId)
 
 def command_CharacterSearch():
     global selectedServer, characterEntry
@@ -167,7 +180,6 @@ def command_CharacterSearch():
 # 캐릭터 이름, 서버로 정보 찾기
 def getCharacterIdFromCharacterName(serverId, characterName):
     global server, conn, apiKey, characterId
-    print(serverId, characterName)
 
     if conn == None:
         connectOpenAPIServer()
@@ -194,13 +206,29 @@ def getCharacterIdFromCharacterName(serverId, characterName):
         tkinter.messagebox.showerror("DnF in", "다시 시도해주세요.")
         return None
 
+def saveCharacter(serverId, characterName):
+    global characterData, characterNum
+
+    if characterNum is 5:
+        characterNum = 0
+
+    characterData[characterNum] = {"server" : servers_dict[serverId], "serverId" : serverId,
+                                   "characterName" : characterName}
+
+    characterNum += 1
+    with open('bookmark_character.json', 'w', encoding="utf-8") as make_file:
+        json.dump(characterData, make_file, ensure_ascii=False, indent="\t")
+
+    characterBookmarkListBox.delete(0, END)
+
+    for d in characterData:
+        characterBookmarkListBox.insert(0, d)
+
+
 def command_CharacterBookmark():
     global selectedServer, characterEntry
     serverId = selectedServer.get()
     characterName = characterEntry.get()
-
-    file = open("bookmark_character.txt", "wb")
-    characterData = OrderedDict()
 
     if server == 'None':
         tkinter.messagebox.showerror("DnF in", "서버를 선택해주세요")
@@ -211,26 +239,8 @@ def command_CharacterBookmark():
         if getCharacterIdFromCharacterName(serverId, characterName) == None :
             pass
         else :
-            characterData["server"] = servers_dict[serverId]
-            characterData["serverId"] = serverId
-            characterData["characterName"] = characterEntry.get()
-            characterData["characterId"] = characterId
+            saveCharacter(serverId, characterName)
 
-            pickle.dump(characterData, file)
-
-#            print(json.dumps(characterData, ensure_ascii=False, indent="\t"))
-
-#            with open('bookmark_character.json', mode = 'w', encoding="utf-8") as f:
-#                json.dump([], f)
-#            with open('bookmark_character.json', mode = 'a', encoding="utf-8") as make_file:
-#                entry =
-#                json.dump(characterData, make_file, ensure_ascii=False, indent="\t")
-
-#            with open("bookmark_character.json", "a") as data:
-#                data.write(json.dumps(characterData))
-#                data.close()
-
-    file.close()
 
 def init_Frame():
     global window, frameCharacter, frameAuction, buttonToCharacter, buttonToAction
@@ -250,7 +260,7 @@ def init_Frame():
 def init_Window():
     global window
     window = Tk()
-    window.geometry("400x500")
+    window.geometry("400x550")
     window.title("DnF in")
 
     logo = PhotoImage(file = "logo.png")
@@ -259,10 +269,16 @@ def init_Window():
     logoLabel.pack()
     logoLabel.place(x = 10, y = 20)
 
+    develop_logo = PhotoImage(file = "develop_logo.png")
+    develop_logoLabel = Label(image = develop_logo)
+    develop_logoLabel.image = develop_logo
+    develop_logoLabel.place(x = 90, y = 500)
+
     tmpFont = font.Font(window, size=20, weight='bold', family='Consolas')
     mainText = Label(window, font = tmpFont, text = "던파 in")
     mainText.pack()
-    mainText.place(x=100, y = 45)
+    mainText.place(x=120, y = 45)
+
 
     init_Frame()
 
