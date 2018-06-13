@@ -4,7 +4,7 @@ import json
 from tkinter import *
 from tkinter import font
 import tkinter.messagebox
-
+import characterWindow
 
 server = "api.neople.co.kr"
 apiKey = "7U2KCB4WfpbyjuvPBbqsz1uOxm4Waddl"
@@ -97,6 +97,8 @@ def getCharacterIdFromCharacterName(serverId, characterName):
         #        print(type(json_response_body))
         print(dic_character_data['characterName'], dic_character_data['level'], dic_character_data['characterId'])
         print("\n---------------여기까지출력됨---------------\n")
+        #characterWindow = Toplevel()
+        characterWindow.run_CharacterWindow()
 
     else :
         tkinter.messagebox.showerror("DnF in", "게임 내에 캐릭터가 존재하지 않습니다.")
