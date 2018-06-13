@@ -6,6 +6,8 @@ from PIL import ImageTk
 from PIL import Image
 from io import BytesIO
 import tkinter.messagebox
+from operator import itemgetter
+import tkinter.scrolledtext as tkst
 
 server = "api.neople.co.kr"
 apiKey = "7U2KCB4WfpbyjuvPBbqsz1uOxm4Waddl"
@@ -83,13 +85,54 @@ def info_item():
     info.insert(INSERT, "등급:  " + data["itemRarity"] + " \n\n")
     info.insert(INSERT, "등급:  " + data["itemType"] + " / " + data["itemTypeDetail"] + " \n\n")
     info.insert(INSERT, "착용레벨:  " + str(data["itemAvailableLevel"]) + " \n\n")
-    info.insert(INSERT, "설명:  " + data["itemExplainDetail"] + " \n")
-    info.insert(INSERT, "획득방법:  " + data["itemObtainInfo"] )
+    info.insert(INSERT, "설명:\n  " + data["itemExplainDetail"] + " \n\n")
+    info.insert(INSERT, "획득방법:\n" + data["itemObtainInfo"] )
 
     info.configure(state="disabled")
 
-def info_auction():
-    global conn, server, apiKey, itemName, auctionFrame
+def auction_sort_byPrice():
+    global ainfo, auctionFrame, adata
+    adata = sorted(adata, key=itemgetter("unitPrice"))
+    ainfo.delete('1.0', END)
+    print_adata()
+
+def auction_sort_byPrice_reverse():
+    global ainfo, auctionFrame, adata
+    adata = sorted(adata, key = itemgetter("unitPrice"), reverse=True)
+    ainfo.delete('1.0', END)
+    print_adata()
+
+def auction_sort_byDate():
+    global ainfo, auctionFrame, adata
+    adata = sorted(adata, key=itemgetter("regDate"))
+    ainfo.delete('1.0', END)
+    print_adata()
+
+def auction_sort_byDate_reverse():
+    global ainfo, auctionFrame, adata
+    adata = sorted(adata, key = itemgetter("regDate"), reverse=True)
+    ainfo.delete('1.0', END)
+    print_adata()
+
+def print_adata():
+    global adata
+    for i in adata:
+        ainfo.insert(INSERT, "이름:  " + i["itemName"] + "\n")
+        ainfo.insert(INSERT, "수량:  " + str(i["count"]) + "\n")
+        ainfo.insert(INSERT, "즉시구매가:  " + str(i["currentPrice"]) + "\n")
+        ainfo.insert(INSERT, "개당즉시구매가:  " + str(i["unitPrice"]) + "\n")
+        ainfo.insert(INSERT, "현재입찰가:  ")
+        if i["price"] is -1:
+            ainfo.insert(INSERT, "-" + "\n")
+        else:
+            ainfo.insert(INSERT, str(i["price"]) + "\n")
+        ainfo.insert(INSERT, "평균가:  " + str(i["averagePrice"]) + "\n")
+        ainfo.insert(INSERT, "등록일:  " + i["regDate"] + "\n")
+        ainfo.insert(INSERT, "마감일:  " + i["expireDate"] + "\n")
+        ainfo.insert(INSERT, "-------------------------" + "\n")
+
+def refresh():
+    global conn, server, apiKey, itemName, auctionFrame, ainfo, adata
 
     if conn == None:
         connectOpenAPIServer()
@@ -102,30 +145,45 @@ def info_auction():
     decode_response_body = response_body.decode('utf-8')
     json_response_body = json.loads(decode_response_body)
     print(json_response_body)
-    data = json_response_body["rows"]
+    adata = json_response_body["rows"]
 
-    info = Text(auctionFrame, width=45)
-    info.pack(side=LEFT)
-    sc = Scrollbar(auctionFrame)
-    sc.pack(side=RIGHT, fill=Y)
-    sc.config(command=info.yview)
-    info.config(yscrollcommand=sc.set)
+    ainfo.delete('1.0', END)
+    print_adata()
 
-    for i in data:
-        info.insert(INSERT, "이름:  " + i["itemName"] + "\n")
-        info.insert(INSERT, "수량:  " + str(i["count"]) + "\n")
-        info.insert(INSERT, "즉시구매가:  " + str(i["currentPrice"]) + "\n")
-        info.insert(INSERT, "개당즉시구매가:  " + str(i["unitPrice"]) + "\n")
-        info.insert(INSERT, "현재입찰가:  ")
-        if i["price"] is -1:
-            info.insert(INSERT, "-" + "\n")
-        else:
-            info.insert(INSERT, str(i["price"]) + "\n")
-        info.insert(INSERT, "평균가:  " + str(i["averagePrice"]) + "\n")
-        info.insert(INSERT, "등록일:  " + i["regDate"] + "\n")
-        info.insert(INSERT, "마감일:  " + i["expireDate"] + "\n")
-        info.insert(INSERT, "-------------------------" + "\n")
+def info_auction():
+    global conn, server, apiKey, itemName, auctionFrame, ainfo, adata
 
+    if conn == None:
+        connectOpenAPIServer()
+
+    encText = urllib.parse.quote(itemName)
+
+    conn.request("GET", "/df/auction?itemName=" + encText + "&apikey=" + apiKey)
+    req = conn.getresponse()
+    response_body = req.read()
+    decode_response_body = response_body.decode('utf-8')
+    json_response_body = json.loads(decode_response_body)
+    print(json_response_body)
+    adata = json_response_body["rows"]
+
+    ainfo = tkst.ScrolledText(auctionFrame, width=45, height = 20, wrap=WORD)
+    ainfo.pack(side=BOTTOM, anchor="w")
+
+    print_adata()
+
+    from tkinter import font
+    tmpFont = font.Font(auctionWindow, size=10, weight='bold', family='Consolas')
+    b = Button(auctionFrame, text="가격별 오름차순", font=tmpFont, command=auction_sort_byPrice)
+    b.place(x = 10, y= 10)
+    b = Button(auctionFrame, text="가격별 내림차순", font=tmpFont, command=auction_sort_byPrice_reverse)
+    b.place(x= 120, y=10)
+    b = Button(auctionFrame, text="등록일 오름차순", font=tmpFont, command=auction_sort_byDate)
+    b.place(x= 10, y=40)
+    b = Button(auctionFrame, text="등록일 내림차순", font=tmpFont, command=auction_sort_byDate_reverse)
+    b.place(x=120, y=40)
+
+    b = Button(auctionFrame, text="새로\n고침", font=tmpFont, command=auction_sort_byDate_reverse, width= 5, height= 3)
+    b.place(x=280, y=10)
 
 def a_init_frame():
     global auctionWindow, itemFrame, auctionFrame

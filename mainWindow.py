@@ -196,9 +196,9 @@ def init_Frame():
     tmpFont = font.Font(window, size=12, weight='bold', family='Consolas')
 
     frameCharacter = LabelFrame(window, text = "캐릭터",width = 400 - 40, height = 250 - 40, font = tmpFont)
-    frameAuction = LabelFrame(window, text = "경매장", width = 400 - 40, height = 250 - 40, font = tmpFont)
+    frameAuction = LabelFrame(window, text = "경매장", width = 400 - 40, height = 100, font = tmpFont)
     frameCharacter.place(x = 20, y = 100)
-    frameAuction.place(x = 20, y = 340)
+    frameAuction.place(x = 20, y = 330)
     frameCharacter.pack_propagate(0)
     frameAuction.pack_propagate(0)
 
@@ -208,13 +208,19 @@ def init_Frame():
 def init_Window():
     global window
     window = Tk()
-    window.geometry("400x600")
+    window.geometry("400x450")
     window.title("DnF in")
 
-    tmpFont = font.Font(window, size=20, weight = 'bold', family = 'Consolas')
+    logo = PhotoImage(file = "logo.png")
+    logoLabel = Label(image = logo)
+    logoLabel.image = logo
+    logoLabel.pack()
+    logoLabel.place(x = 10, y = 20)
+
+    tmpFont = font.Font(window, size=20, weight='bold', family='Consolas')
     mainText = Label(window, font = tmpFont, text = "던파 in")
     mainText.pack()
-    mainText.place(x=20, y = 20)
+    mainText.place(x=100, y = 45)
 
     init_Frame()
 
