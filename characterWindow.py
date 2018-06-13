@@ -102,11 +102,10 @@ def init_StatusFrame():
         print("\n---------------여기까지출력됨---------------\n")
         decode_response_body = response_body.decode('utf-8')
         json_response_body = json.loads(decode_response_body)
-        dic_info_data = json_response_body
-        dic_equip_data = json_response_body['status']
+        dic_status_data = json_response_body['status']
 
         statusList = []
-        for i in dic_equip_data:
+        for i in dic_status_data:
             statusNameValue = i['name'] + " : " + str(i['value'])
             statusList.append(statusNameValue)
 
@@ -179,16 +178,3 @@ def init_Ui(sId, cId):
 
 def run_CharacterWindow():
     window.mainloop()
-
-#        RenderText.insert(INSERT, "[캐릭터 이름] : ")
-#        RenderText.insert(INSERT, dic_character_data['characterName'])
-#        RenderText.insert(INSERT, "\n")
-#        RenderText.insert(INSERT, "[레벨] : ")
-#        RenderText.insert(INSERT, dic_character_data['level'])
-#        RenderText.insert(INSERT, "\n")
-#        RenderText.insert(INSERT, "[직업] : ")
-#        RenderText.insert(INSERT, dic_character_data['jobName'])
-#        RenderText.insert(INSERT, "\n")
-#        RenderText.insert(INSERT, "[전직] : ")
-#        RenderText.insert(INSERT, dic_character_data['jobGrowName'])
-#        RenderText.insert(INSERT, "\n")
