@@ -149,7 +149,7 @@ def init_CharacterFrame():
 
 def select_character(evt):
     global characterData, selectedServer
-    r = open('item.json', mode="r", encoding="utf-8").read()
+#    r = open('item.json', mode="r", encoding="utf-8").read()
 
     w = evt.widget
     index = int(w.curselection()[0])
