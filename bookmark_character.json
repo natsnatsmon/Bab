@@ -1,14 +1,4 @@
 {
-	"0": {
-		"server": "카인",
-		"serverId": "cain",
-		"characterName": "낯낯"
-	},
-	"1": {
-		"server": "카인",
-		"serverId": "cain",
-		"characterName": "낯낯몬"
-	},
 	"2": {
 		"server": "카인",
 		"serverId": "cain",
@@ -25,8 +15,13 @@
 		"characterName": "박하맛사탕☆"
 	},
 	"0": {
-		"server": "힐더",
-		"serverId": "hilder",
-		"characterName": "→낯낯←"
+		"server": "카인",
+		"serverId": "cain",
+		"characterName": "낯낯"
+	},
+	"1": {
+		"server": "카인",
+		"serverId": "cain",
+		"characterName": "익명의갓파더"
 	}
 }

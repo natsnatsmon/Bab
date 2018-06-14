@@ -212,7 +212,8 @@ def saveCharacter(serverId, characterName):
     if characterNum is 5:
         characterNum = 0
 
-    characterData[characterNum] = {"server" : servers_dict[serverId], "serverId" : serverId,
+    del characterData[str(characterNum)]
+    characterData[str(characterNum)] = {"server" : servers_dict[serverId], "serverId" : serverId,
                                    "characterName" : characterName}
 
     characterNum += 1
@@ -221,8 +222,10 @@ def saveCharacter(serverId, characterName):
 
     characterBookmarkListBox.delete(0, END)
 
-    for d in characterData:
-        characterBookmarkListBox.insert(0, d)
+    tmpNum = 0
+    for d in range(5):
+        characterBookmarkListBox.insert(d, characterData[str(d)]['server'] + " " + characterData[str(d)]['characterName'])
+        tmpNum += 1
 
 
 def command_CharacterBookmark():
